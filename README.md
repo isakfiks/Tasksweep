@@ -2,8 +2,8 @@
 
 A simple to-do list website that stores your tasks locally **Tasksweep** is perfect for anyone who needs a fast task management solution for short-term, local usage.
 
-Want to try a demo right away? Here's a hosted link , so feel free to take use of it:
-
+Want to try a demo of the webapp right away? Here's a hosted link , so feel free to take use of it:
+https://tasksweep-wujx.vercel.app/
 ---
 
 ## Features
