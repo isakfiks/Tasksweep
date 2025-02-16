@@ -68,8 +68,7 @@ export default function App() {
   function undoFinish(taskId: number) {
     const task = finishedTasks.find(t => t.id === taskId);
     if (task) {
-      const { completedAt, ...taskWithoutCompletedAt } = task;
-      setTasks([...tasks, taskWithoutCompletedAt]);
+      setTasks([...tasks, { ...task, completedAt: undefined }]);
       setFinished(finishedTasks.filter(t => t.id !== taskId));
     }
   }
