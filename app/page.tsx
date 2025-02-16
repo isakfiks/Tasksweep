@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Check, Plus, Trash2, Undo2, Calendar, Search } from "lucide-react";
+import { Check, Plus, Trash2, Undo2, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function App() {
-  const [tasks, setTasks] = useState([]);
-  const [finishedTasks, setFinished] = useState([]);
-  const [isAddingTask, setIsAddingTask] = useState(false);
+  interface Task {
+    id: number;
+    name: string;
+    createdAt: string;
+    completedAt?: string;
+  }
+
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [finishedTasks, setFinished] = useState<Task[]>([]);
   const [newTaskName, setNewTaskName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -34,7 +40,7 @@ export default function App() {
     localStorage.setItem('finishedTasks', JSON.stringify(finishedTasks));
   }
 
-  function handleNewTask(e) {
+  function handleNewTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (newTaskName.trim() !== "") {
       if (!tasks.find(task => task.name === newTaskName)) {
@@ -48,10 +54,9 @@ export default function App() {
         setTimeout(() => setShowAlert(false), 2000);
       }
     }
-    setIsAddingTask(false);
   }
 
-  function finishTask(taskId) {
+  function finishTask(taskId: number) {
     const task = tasks.find(t => t.id === taskId);
     if (task) {
       setFinished([...finishedTasks, { ...task, completedAt: new Date().toISOString() }]);
@@ -59,7 +64,7 @@ export default function App() {
     }
   }
 
-  function undoFinish(taskId) {
+  function undoFinish(taskId: number) {
     const task = finishedTasks.find(t => t.id === taskId);
     if (task) {
       const { completedAt, ...taskWithoutCompletedAt } = task;
@@ -68,7 +73,7 @@ export default function App() {
     }
   }
 
-  function deleteTask(taskId) {
+  function deleteTask(taskId: number) {
     setTasks(tasks.filter(t => t.id !== taskId));
     setFinished(finishedTasks.filter(t => t.id !== taskId));
   }
@@ -119,7 +124,9 @@ export default function App() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 min-w-[200px] bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
               />
+              <label htmlFor="filterStatus" className="sr-only">Filter tasks</label>
               <select
+                id="filterStatus"
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
                 className="bg-gray-700/50 border-gray-600 text-white rounded-md p-2"
@@ -172,5 +179,3 @@ export default function App() {
     </div>
   );
 }
-
-export default App;
